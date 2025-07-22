@@ -1,12 +1,14 @@
 #include "data.h"
 #include "checks.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 void writeLatinSquare(short n, short square[n][n], char *outFileName) {
     printf("Saving to %s...\n", outFileName);
     FILE *file = fopen(outFileName, "w");
     if (file == NULL) {
-        printf("Error opening file");
-        return;
+        printf("Error: Could not open output file for writing.\n");
+        return; 
     }
     fprintf(file, "%hd\n", n);
     for (int i = 0; i < n; i++) {
@@ -17,7 +19,6 @@ void writeLatinSquare(short n, short square[n][n], char *outFileName) {
     }
     printf("Saved successfully!\n");
     fclose(file);
-    exit(0);
 }
 
 int readLatinSquare(FILE *file, short n, short square[n][n]) {
@@ -25,11 +26,13 @@ int readLatinSquare(FILE *file, short n, short square[n][n]) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (fscanf(file, "%hd", &num) != 1) {
-                printf("Error reading data or less data\n");
+                printf("Error: Malformed data or not enough numbers in the input file.\n");
+                fclose(file);
                 return 1;
             }
-            if (num > n) {
-                printf("Invalid number\n");
+            if (num < 0 || num > n) {
+                printf("Error: Invalid number %hd found in the input file.\n", num);
+                fclose(file);
                 return 1;
             }
             square[i][j] = num;
@@ -37,7 +40,8 @@ int readLatinSquare(FILE *file, short n, short square[n][n]) {
     }
 
     if (fscanf(file, "%hd", &num) == 1) {
-        printf("Extra data\n");
+        printf("Error: Extra data found at the end of the input file.\n");
+        fclose(file);
         return 1;
     }
 
