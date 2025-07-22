@@ -1,11 +1,25 @@
+/**
+ * @file main.c
+ * @brief Main entry point for the Latin Square Solver program
+ * @author Your Name
+ * @date 2024
+ * 
+ * This program reads a Latin Square puzzle from a file, allows user confirmation,
+ * and attempts to solve it using backtracking with constraint propagation.
+ */
+
 #include "data.h"
 #include "checks.h"
 #include "autoplay.h"
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_N 9
+#define MAX_N 9 /**< Maximum allowed size for Latin Square */
 
+/**
+ * @brief Prompts user for confirmation to start solving the puzzle
+ * @return 1 if user confirms (y/Y), 0 otherwise
+ */
 int getUserConfirmation() {
     char response;
     printf("Are you ready to solve this puzzle? (y/n): ");
@@ -15,6 +29,16 @@ int getUserConfirmation() {
     return (response == 'y' || response == 'Y');
 }
 
+/**
+ * @brief Main function - entry point of the program
+ * @param argc Number of command line arguments
+ * @param argv Array of command line argument strings
+ * @return 0 on success, 1 on error
+ * 
+ * Usage: ./latin_square_game <inputfile.txt>
+ * The program reads a Latin Square from the input file, displays it,
+ * asks for user confirmation, then attempts to solve it.
+ */
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("Usage: %s <inputfile.txt>\n", argv[0]);
